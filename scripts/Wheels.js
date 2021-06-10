@@ -1,4 +1,4 @@
-import { getWheels } from "./database.js"
+import { getWheels, setWheel } from "./data.js"
 
 const wheels = getWheels()
 

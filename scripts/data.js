@@ -23,15 +23,17 @@ const database = {
         {id:1, type:"17-inch Pair Radial", price: 1200},
         {id:2, type:"17-inch Pair Radial Black", price: 1400},
         {id:3, type:"18-inch Pair Spoke Silver", price: 1800},
-        {id:4, type:"18-inch Pair Spoke Black", price: 22000}
+        {id:4, type:"18-inch Pair Spoke Black", price: 2200}
     ],
     orders : [
-        {id:1, interiorId: 2, paintId : 3, technologyId : 2, wheelId = 4}
-    ]
+        {id:1, interiorId: 2, paintId : 3, technologyId : 2, wheelId : 4}
+    ],
+    orderBuilder: {}
+
 }
 
 export const getInteriors = () => {
-    return database.metals.map(interior => ({...interior}))
+    return database.interiors.map(interior => ({...interior}))
 }
 export const getPaints = () => {
     return database.paints.map(paint => ({...paint}))
@@ -44,4 +46,37 @@ export const getWheels = () => {
 }
 export const getOrders = () => {
     return database.orders.map(order => ({...order}))
+}
+export const setInterior = (id) => {
+    database.orderBuilder.interiorId = id
+}
+export const setPaint = (id) => {
+    database.orderBuilder.paintId = id
+}
+export const setTechnology = (id) => {
+    database.orderBuilder.technologyId = id
+}
+export const setWheel = (id) => {
+    database.orderBuilder.wheelId = id
+}
+
+export const addCustomOrder = () => {
+    // Copy the current state of user choices
+    const newOrder = {...database.orderBuilder}
+
+    // Add a new primary key to the object
+    const lastIndex = database.orders.length - 1
+    newOrder.id = database.orders[lastIndex].id + 1
+
+    // Add a timestamp to the order
+    newOrder.timestamp = Date.now()
+
+    // Add the new order object to custom orders state
+    database.orders.push(newOrder)
+
+    // Reset the temporary state for user choices
+    database.orderBuilder = {}
+
+    // Broadcast a notification that permanent state has changed
+    document.dispatchEvent(new CustomEvent("stateChanged"))
 }
