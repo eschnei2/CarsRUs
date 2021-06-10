@@ -29,11 +29,12 @@ const buildOrderListItem = (order) => {
             return wheel.id === order.wheelId
         }
     )
+    let time = new Date(Date.now())
 
     const totalCost = foundInterior.price + foundTechnology.price + foundPaint.price + foundWheel.price
     
     return `<li>
-        Order #${order.id} cost ${totalCost}
+        Order #${order.id} cost ${totalCost} and was placed on ${order.timestamp}
     </li>`
 }
 
